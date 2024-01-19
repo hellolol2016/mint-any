@@ -19,6 +19,7 @@
     "@nomicfoundation/hardhat-network-helpers": "1.0.0",
     "@nomicfoundation/hardhat-toolbox": "4.0.0",
     "@nomicfoundation/hardhat-verify": "2.0.0",
+    "@pinata/sdk": "^2.1.0",
     "@typechain/ethers-v6": "0.5.0",
     "@typechain/hardhat": "9.0.0",
     "@types/react": "^18.2.43",
