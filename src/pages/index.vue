@@ -6,13 +6,19 @@ defineOptions({
 })
 const user = useUserStore()
 const name = ref(user.savedName)
+const showImage = ref(false)
+const image = ref('')
 
 const router = useRouter()
+
 function go() {
   // THIS FUNCTION IS THE SUBMIT FUNCTION
   if (name.value)
     router.push(`/hi/${encodeURIComponent(name.value)}`)
 }
+
+// Function that loads the image from the backend
+// TO-DO
 
 const { t } = useI18n()
 </script>
@@ -72,14 +78,20 @@ const { t } = useI18n()
     </div>
 
     <div>
+      <!-- removed for testing functionality :disabled="!name" -->
       <button
         class="go-button"
         m-2 text-sm btn
-        :disabled="!name"
-        @click="go"
+        @click="go(); showImage = true"
       >
         {{ t('button.go') }}
       </button>
+
+      <div style="display: flex; justify-content: center; align-items: center">
+        <div v-if="showImage" class="image">
+          <img :src="image" alt="Image to be loaded">
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -98,5 +110,24 @@ meta:
 }
 .go-button {
   width: 100px;
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 90%;
+  width: 512px;
+  height: 512px;
+  margin: 0 25px;
+  border: 3px solid green;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.image img {
+  width: 512px;
+  height: 512px;
+  border-radius: 6px;
 }
 </style>
