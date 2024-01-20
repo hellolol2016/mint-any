@@ -9,7 +9,9 @@ import type { UserModule } from './types'
 import '@unocss/reset/tailwind.css'
 import './styles/main.css'
 import 'uno.css'
-
+import PrimeVue from 'primevue/config'
+import { use } from 'chai'
+import 'primevue/resources/themes/lara-light-green/theme.css'
 // const routes = setupLayouts(generatedRoutes)
 
 // https://github.com/antfu/vite-ssg
@@ -23,6 +25,8 @@ export const createApp = ViteSSG(
     // install all modules under `modules/`
     Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
-    // ctx.app.use(Previewer)
+       ctx.app.use(PrimeVue)
   },
 )
+
+

@@ -1,4 +1,7 @@
+
 <script setup lang="ts">
+import FileUpload from 'primevue/fileupload';
+
 defineOptions({
   name: 'IndexPage',
 })
@@ -7,6 +10,8 @@ const name = ref(user.savedName)
 
 const router = useRouter()
 function go() {
+
+  //THIS FUNCTION IS THE SUBMIT FUNCTION
   if (name.value)
     router.push(`/hi/${encodeURIComponent(name.value)}`)
 }
@@ -21,22 +26,50 @@ const { t } = useI18n()
     </div>
     <p>
       <a rel="noreferrer" href="https://github.com/antfu/vitesse" target="_blank">
-        Vitesse
+        Mint-Any
       </a>
     </p>
     <p>
-      <em text-sm opacity-75>{{ t('intro.desc') }}</em>
+      <em text-sm opacity-75>{{ "A digital minting DAPP" }}</em>
     </p>
 
     <div py-4 />
 
+
+    <p>Create your NFTs</p>
+    
     <TheInput
       v-model="name"
-      :placeholder="t('intro.whats-your-name')"
+      :placeholder="t('NFT NAME')"
       autocomplete="false"
       @keydown.enter="go"
     />
-    <label class="hidden" for="input">{{ t('intro.whats-your-name') }}</label>
+    <label class="hidden" for="input">{{ t('NFT name') }}</label>
+
+
+    <TheInput
+      v-model="name"
+      :placeholder="t('NFT description')"
+      autocomplete="false"
+      @keydown.enter="go"
+    />
+    <label class="hidden" for="input">{{ t('NFT description') }}</label>
+
+
+    <TheInput
+      v-model="name"
+      :placeholder="t('# of NFTS to mint')"
+      autocomplete="false"
+      @keydown.enter="go"
+    />
+    <label class="hidden" for="input">{{ t('# of NFTS to mint') }}</label>
+
+
+    <p>Display Image</p>
+    <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000"  />
+    
+    <p>Media File</p>
+    <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000"  />
 
     <div>
       <button
