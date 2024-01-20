@@ -21,8 +21,8 @@ const { t } = useI18n()
 
 <template>
   <div>
-    <div text-4xl>
-      <div i-carbon-campsite inline-block />
+    <div flex text-4xl justify-center>
+      <img src="/minty.svg" alt="logo" style="color: aliceblue; height:60px"/>
     </div>
     <p>
       <a rel="noreferrer" href="https://github.com/antfu/vitesse" target="_blank">

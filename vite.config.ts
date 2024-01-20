@@ -109,9 +109,9 @@ export default defineConfig({
         theme_color: '#ffffff',
         icons: [
           {
-            src: '/pwa-192x192.png',
+            src: '/minty.svg',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/svg',
           },
           {
             src: '/pwa-512x512.png',

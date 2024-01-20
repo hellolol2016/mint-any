@@ -7,7 +7,8 @@ const { t } = useI18n()
 <template>
   <nav flex="~ gap-4" mt-6 justify-center text-xl>
     <RouterLink icon-btn to="/" :title="t('button.home')">
-      <div i-carbon-campsite />
+
+      <img src="/minty.svg" alt="logo" style="color: aliceblue; height:23px"/>
     </RouterLink>
 
     <button icon-btn :title="t('button.toggle_dark')" @click="toggleDark()">
