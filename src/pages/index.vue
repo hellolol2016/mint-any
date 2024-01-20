@@ -1,6 +1,5 @@
-
 <script setup lang="ts">
-import FileUpload from 'primevue/fileupload';
+import FileUpload from 'primevue/fileupload'
 
 defineOptions({
   name: 'IndexPage',
@@ -10,8 +9,7 @@ const name = ref(user.savedName)
 
 const router = useRouter()
 function go() {
-
-  //THIS FUNCTION IS THE SUBMIT FUNCTION
+  // THIS FUNCTION IS THE SUBMIT FUNCTION
   if (name.value)
     router.push(`/hi/${encodeURIComponent(name.value)}`)
 }
@@ -21,8 +19,8 @@ const { t } = useI18n()
 
 <template>
   <div>
-    <div flex text-4xl justify-center>
-      <img src="/minty.svg" alt="logo" style="color: aliceblue; height:60px"/>
+    <div flex justify-center text-4xl>
+      <img src="/minty.svg" alt="logo" style="color: aliceblue; height:60px">
     </div>
     <p>
       <a rel="noreferrer" href="https://github.com/antfu/vitesse" target="_blank">
@@ -35,9 +33,8 @@ const { t } = useI18n()
 
     <div py-4 />
 
-
     <p>Create your NFTs</p>
-    
+
     <TheInput
       v-model="name"
       :placeholder="t('NFT NAME')"
@@ -45,7 +42,6 @@ const { t } = useI18n()
       @keydown.enter="go"
     />
     <label class="hidden" for="input">{{ t('NFT name') }}</label>
-
 
     <TheInput
       v-model="name"
@@ -55,7 +51,6 @@ const { t } = useI18n()
     />
     <label class="hidden" for="input">{{ t('NFT description') }}</label>
 
-
     <TheInput
       v-model="name"
       :placeholder="t('# of NFTS to mint')"
@@ -64,16 +59,22 @@ const { t } = useI18n()
     />
     <label class="hidden" for="input">{{ t('# of NFTS to mint') }}</label>
 
+    <div class="button-container">
+      <div style="block">
+        <p>Display Image</p>
+        <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :max-file-size="1000000" />
+      </div>
 
-    <p>Display Image</p>
-    <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000"  />
-    
-    <p>Media File</p>
-    <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000"  />
+      <div style="block">
+        <p>Media File</p>
+        <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :max-file-size="1000000" />
+      </div>
+    </div>
 
     <div>
       <button
-        m-3 text-sm btn
+        class="go-button"
+        m-2 text-sm btn
         :disabled="!name"
         @click="go"
       >
@@ -87,3 +88,15 @@ const { t } = useI18n()
 meta:
   layout: home
 </route>
+
+<style scoped>
+  .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+.go-button {
+  width: 100px;
+}
+</style>

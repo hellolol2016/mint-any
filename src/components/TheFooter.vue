@@ -1,14 +1,11 @@
 <script setup lang="ts">
-
 const { t } = useI18n()
-
 </script>
 
 <template>
-  <nav flex="~ gap-4" mt-6 justify-center text-xl>
+  <nav flex="~ gap-4" mt-6 justify-center p-4 text-xl>
     <RouterLink icon-btn to="/" :title="t('button.home')">
-
-      <img src="/minty.svg" alt="logo" style="color: aliceblue; height:23px"/>
+      <img src="/minty.svg" alt="logo" style="color: aliceblue; height:23px">
     </RouterLink>
 
     <button icon-btn :title="t('button.toggle_dark')" @click="toggleDark()">
