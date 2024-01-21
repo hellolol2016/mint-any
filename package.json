@@ -17,10 +17,12 @@
     "sizecheck": "npx vite-bundle-visualizer"
   },
   "dependencies": {
+    "@metamask/providers": "^14.0.2",
     "@unhead/vue": "^1.8.9",
     "@unocss/reset": "^0.58.1",
     "@vueuse/core": "^10.7.0",
     "@vueuse/head": "^2.0.0",
+    "ethers": "^6.10.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.7",
     "primevue": "^3.46.0",
