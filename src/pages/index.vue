@@ -1,28 +1,60 @@
 <script setup lang="ts">
-import FileUpload from 'primevue/fileupload'
-import {sayHello} from '../lib/backend'
+import { ref } from 'vue'
 
-defineOptions({
-  name: 'IndexPage',
-})
-const user = useUserStore()
-const name = ref(user.savedName)
-const showImage = ref(false)
-const image = ref('')
+import { MintSuccessful, NFTQuantity, description, displayImage, handleDescriptionChange, handleMint, handleNFTQuantityChange, handleNameChange, jsonUrl, media, name } from '../lib/backend.js'
+import { pinFileToIPFS, uploadJSONToIPFS } from '../lib/pinata.js'
 
-const router = useRouter()
+const { t } = useI18n()
+
+async function handleMediaUpload(event) {
+  const files = event.target.files
+  console.log(files)
+  console.log(event)
+  if (files) {
+    console.log(files)
+    const resObjArray = await Promise.all(
+      Array.from(files).map(file => pinFileToIPFS(file)),
+    )
+    const pinataURLs = resObjArray.map(resObj => resObj?.pinataURL)
+    media.value = (pinataURLs)
+    console.log(media)
+    console.log(media.value)
+  }
+}
+
+async function handleDisplayImage(event) {
+  console.log(event.files)
+  console.log(event)
+  const file = event.target.files[0]
+  console.log(file)
+  if (file) {
+    console.log(file)
+    const resObj = await pinFileToIPFS(file)
+    const pinataURL = resObj.pinataURL
+    console.log(pinataURL)
+    const newGatewayURL = pinataURL.replace(
+      'https://gateway.pinata.cloud/ipfs/',
+      'https://ipfs.io/ipfs/',
+    )
+
+    displayImage.value = newGatewayURL
+  }
+
+  console.log(displayImage)
+  console.log(displayImage._value)
+  console.log(displayImage.value)
+}
+
+// const router = useRouter()
 
 function go() {
   // THIS FUNCTION IS THE SUBMIT FUNCTION
-  sayHello()
-  //if (name.value)
-    //router.push(`/hi/${encodeURIComponent(name.value)}`)
+  if (name.value)
+    router.push(`/hi/${encodeURIComponent(name.value)}`)
 }
 
 // Function that loads the image from the backend
 // TO-DO
-
-const { t } = useI18n()
 </script>
 
 <template>
@@ -47,35 +79,35 @@ const { t } = useI18n()
       v-model="name"
       :placeholder="t('NFT NAME')"
       autocomplete="false"
-      @keydown.enter="go"
+      @change="handleNameChange"
     />
     <label class="hidden" for="input">{{ t('NFT name') }}</label>
 
     <TheInput
-      v-model="name"
+      v-model="description"
       :placeholder="t('NFT description')"
       autocomplete="false"
-      @keydown.enter="go"
+      @change="handleDescriptionChange"
     />
     <label class="hidden" for="input">{{ t('NFT description') }}</label>
 
     <TheInput
-      v-model="name"
+      v-model="NFTQuantity"
       :placeholder="t('# of NFTS to mint')"
       autocomplete="false"
-      @keydown.enter="go"
+      @change="handleNFTQuantityChange"
     />
     <label class="hidden" for="input">{{ t('# of NFTS to mint') }}</label>
 
     <div class="button-container">
       <div style="block">
         <p>Display Image</p>
-        <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :max-file-size="1000000" />
+        <input type="file" accept="image/*" @change="handleDisplayImage">
       </div>
 
       <div style="block">
         <p>Media File</p>
-        <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :max-file-size="1000000" />
+        <input type="file" multiple @change="handleMediaUpload">
       </div>
     </div>
 
@@ -84,24 +116,24 @@ const { t } = useI18n()
       <button
         class="go-button"
         m-2 text-sm btn
-        @click="go(); showImage = true"
+        @click="handleMint"
       >
-        Submit
+        {{ t('button.go') }}
       </button>
 
       <div style="display: flex; justify-content: center; align-items: center">
-        <div v-if="showImage" class="image">
-          <img :src="image" alt="Image to be loaded">
+        <div class="image">
+          <img v-if="MintSuccessful" :src="displayImage" alt="Display Image">
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<route lang="yaml">
+<!-- <route lang="yaml">
 meta:
   layout: home
-</route>
+</route> -->
 
 <style scoped>
   .button-container {
@@ -113,7 +145,6 @@ meta:
 .go-button {
   width: 100px;
 }
-
 .image {
   display: flex;
   justify-content: center;

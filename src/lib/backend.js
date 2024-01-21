@@ -1,128 +1,134 @@
-/* eslint-disable import/order */
+// @ts-nocheck
 
-import { pinFileToIPFS,uploadJSONToIPFS } from "./pinata";
+// still need to import greeter
 
-//still need to import greeter
-//import Greeter from "./artifacts/contracts/Greeter.sol/Greeter.json";
-import { ethers } from "ethers";
-import { ref } from "vue"; 
+// import Greeter from "./artifacts/contracts/Greeter.sol/Greeter.json";
+import { ethers } from 'ethers'
 
-const contractAddress = "0x8163647d1108E2dfF08d17CfE866822CCb45bD2B";
+import { ref } from 'vue'
+import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json'
+import { pinFileToIPFS, uploadJSONToIPFS } from './pinata'
 
+const contractAddress = '0x8163647d1108E2dfF08d17CfE866822CCb45bD2B'
 
-const jsonUrl = ref("")
-const name = ref("")
-const description = ref("")
-const displayImage = ref("")
-const media = ref([])
-const NFTQuantity = ref("")
+export const jsonUrl = ref('')
+export const name = ref('')
+export const description = ref('')
+export const displayImage = ref('')
+export const media = ref([])
+export const NFTQuantity = ref('')
 
-const jsonDate = {
+export const MintSuccessful = ref(false)
+const jsonData = {
   name,
   description,
   displayImage,
-  media
+  media,
 }
 
-
-export async function sayHello(){
-  console.log("hello");
+export async function sayHello() {
+  console.log('hello')
 }
-
-
 //////////////////////////////////////////
 // Helper Functions
 
 // Requests access to the user's Meta Mask Account
 // https://metamask.io/
 export async function requestAccount() {
-  await window.ethereum.request({ method: "eth_requestAccounts" });
+  await window.ethereum.request({ method: 'eth_requestAccounts' })
 }
 
 // Sets the greeting from input text box
-export async function mintNFT(quantity) {
+async function mintNFT(quantity) {
   // If MetaMask exists
-  if (typeof window.ethereum !== "undefined") {
-    await requestAccount();
+  if (window.ethereum) {
+    await requestAccount()
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = provider.getSigner()
 
     const contract = new ethers.Contract(
       contractAddress,
       Greeter.abi,
-      signer
-    );
+      signer,
+    )
+    console.log(quantity._value)
 
     try {
-      const transaction = await contract.mint(quantity, {
-        value: ethers.utils.parseEther(`${quantity * 0.001}`),
-      });
+      const transaction = await contract.mint(quantity._value, {
+        value: ethers.utils.parseEther(`${quantity._value * 0.001}`),
+      })
 
-      console.log("Transaction hash:", transaction.hash);
-      console.log("Waiting for transaction to be mined...");
+      console.log('Transaction hash:', transaction.hash)
+      console.log('Waiting for transaction to be mined...')
 
-      await transaction.wait();
+      await transaction.wait()
 
-      console.log("Transaction mined!");
-    } catch (error) {
-      console.error("Error minting NFT:", error);
+      console.log('Transaction mined!')
+      MintSuccessful.value = true
+    }
+    catch (error) {
+      console.error('Error minting NFT:', error)
     }
   }
 }
 /////////////////////////////////////////
 
-
 // handle Name in JSON
-const handleNameChange = (event) => {
-  name.value = event.target.value;
-};
+export function handleNameChange(event) {
+  name.value = event.target.value
+  console.log(name)
+}
 
 // handle Description in JSON
-const handleDescriptionChange = (event) => {
-  description.value=(event.target.value);
-};
+export function handleDescriptionChange(event) {
+  description.value = (event.target.value)
+}
 
 // handle Display in JSON
-const handleDisplayImage = async (event) => {
-  const file = event.target.files[0];
+export async function handleDisplayImage(event) {
+  console.log(event.files)
+  console.log(event)
+  const file = event.target.files[0]
+  console.log(file)
   if (file) {
-    const resObj = await pinFileToIPFS(file);
-    const pinataURL = resObj.pinataURL;
-    console.log(pinataURL);
-    displayImage.value=(pinataURL);
+    console.log(file)
+    const resObj = await pinFileToIPFS(file)
+    const pinataURL = resObj.pinataURL
+    console.log(pinataURL)
+    displayImage.value = (pinataURL)
   }
 
-  console.log(displayImage);
-};
+  console.log(displayImage)
+}
 
 // handle Media[] in JSON
-const handleMediaUpload = async (event) => {
-  const files = event.target.files;
+export async function handleMediaUpload(event) {
+  const files = event.target.files
   if (files) {
     const resObjArray = await Promise.all(
-      Array.from(files).map((file) => pinFileToIPFS(file))
-    );
-    const pinataURLs = resObjArray.map((resObj) => resObj?.pinataURL);
-    media.value=(pinataURLs);
+      Array.from(files).map(file => pinFileToIPFS(file)),
+    )
+    const pinataURLs = resObjArray.map(resObj => resObj?.pinataURL)
+    media.value = (pinataURLs)
   }
-};
+}
 
-  // handle mint function - parameter
-export const handleNFTQuantityChange = (event) => {
-  setNFTQuantity(event.target.value);
-};
+// handle mint function - parameter
+export function handleNFTQuantityChange(event) {
+  NFTQuantity.value = event.target.value
+}
 
-export const handleMint = async () => {
+export async function handleMint() {
   if (NFTQuantity) {
-    mintNFT(NFTQuantity);
-    console.log(jsonData);
+    await mintNFT(NFTQuantity)
+    console.log(jsonData)
     await uploadJSONToIPFS(jsonData)
       .then((resObj) => {
-        setJsonUrl(resObj.pinataURL);
+        jsonUrl.value = resObj.pinataURL
       })
       .catch((error) => {
-        console.error("Error uploading JSON to IPFS:", error);
-      });
+        console.error('Error uploading JSON to IPFS:', error)
+      })
   }
-  };
+}
