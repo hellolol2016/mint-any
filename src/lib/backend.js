@@ -125,7 +125,11 @@ export async function handleMint() {
     console.log(jsonData)
     await uploadJSONToIPFS(jsonData)
       .then((resObj) => {
-        jsonUrl.value = resObj.pinataURL
+        const newGatewayURL = resObj.pinataURL.replace(
+          'https://gateway.pinata.cloud/ipfs/',
+          'https://ipfs.io/ipfs/',
+        )
+        jsonUrl.value = newGatewayURL
       })
       .catch((error) => {
         console.error('Error uploading JSON to IPFS:', error)
