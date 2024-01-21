@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FileUpload from 'primevue/fileupload'
+import {sayHello} from '../lib/backend'
 
 defineOptions({
   name: 'IndexPage',
@@ -13,8 +14,9 @@ const router = useRouter()
 
 function go() {
   // THIS FUNCTION IS THE SUBMIT FUNCTION
-  if (name.value)
-    router.push(`/hi/${encodeURIComponent(name.value)}`)
+  sayHello()
+  //if (name.value)
+    //router.push(`/hi/${encodeURIComponent(name.value)}`)
 }
 
 // Function that loads the image from the backend
@@ -84,7 +86,7 @@ const { t } = useI18n()
         m-2 text-sm btn
         @click="go(); showImage = true"
       >
-        {{ t('button.go') }}
+        Submit
       </button>
 
       <div style="display: flex; justify-content: center; align-items: center">

@@ -1,13 +1,14 @@
- // @ts-nocheck 
+/* eslint-disable import/order */
 
 import { pinFileToIPFS,uploadJSONToIPFS } from "./pinata";
+
 //still need to import greeter
 //import Greeter from "./artifacts/contracts/Greeter.sol/Greeter.json";
 import { ethers } from "ethers";
-import "./App.css";
+import { ref } from "vue"; 
+
 const contractAddress = "0x8163647d1108E2dfF08d17CfE866822CCb45bD2B";
 
-import { Ref } from "vue"; 
 
 const jsonUrl = ref("")
 const name = ref("")
@@ -24,6 +25,9 @@ const jsonDate = {
 }
 
 
+export async function sayHello(){
+  console.log("hello");
+}
 
 
 //////////////////////////////////////////
@@ -36,7 +40,7 @@ export async function requestAccount() {
 }
 
 // Sets the greeting from input text box
-export async function mintNFT(quantity:any) {
+export async function mintNFT(quantity) {
   // If MetaMask exists
   if (typeof window.ethereum !== "undefined") {
     await requestAccount();
@@ -99,7 +103,7 @@ const handleMediaUpload = async (event) => {
     const resObjArray = await Promise.all(
       Array.from(files).map((file) => pinFileToIPFS(file))
     );
-    const pinataURLs :(string|undefined)[] = resObjArray.map((resObj) => resObj?.pinataURL);
+    const pinataURLs = resObjArray.map((resObj) => resObj?.pinataURL);
     media.value=(pinataURLs);
   }
 };
