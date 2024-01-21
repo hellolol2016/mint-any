@@ -53,6 +53,7 @@ function go() {
     router.push(`/hi/${encodeURIComponent(name.value)}`)
 }
 
+const contractAddress = 'p0x8163647d1108E2dfF08d17CfE866822CCb45bD2B'
 // Function that loads the image from the backend
 // TO-DO
 </script>
@@ -126,6 +127,21 @@ function go() {
           <img v-if="MintSuccessful" :src="displayImage" alt="Display Image">
         </div>
       </div>
+              <div>
+          View the
+          <a href={jsonUrl} target="_blank" rel="noopener noreferrer">
+            Metadata
+          </a>
+        </div>
+        <div>
+          <a
+            href="https://sepolia.etherscan.io/address/0x8163647d1108E2dfF08d17CfE866822CCb45bD2B"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View in Etherscan
+          </a>
+        </div>
     </div>
   </div>
 </template>
