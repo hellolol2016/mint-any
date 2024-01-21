@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script type="module" setup lang="ts">
 import { ref } from 'vue'
 
 import { MintSuccessful, NFTQuantity, description, displayImage, handleDescriptionChange, handleMint, handleNFTQuantityChange, handleNameChange, jsonUrl, media, name } from '../lib/backend.js'
